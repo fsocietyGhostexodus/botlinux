@@ -9,7 +9,7 @@ from discord.ext.commands import has_permissions,  CheckFailure, check
 from discord.ext import commands, tasks
 from discord.utils import get
 
-TOKEN = 'ODI0NzIyNjA3Njc2MTk0ODE3.YFzgyA.gdhTFr4jV-XmlaUqGkiwaXPAoqw'
+TOKEN = ''
 
 
 
