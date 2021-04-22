@@ -1,0 +1,111 @@
+import discord
+import webbrowser
+import random
+from discord.ext import commands
+import asyncio
+from googlesearch import search
+from discord.ext.commands import Bot
+from discord.ext.commands import has_permissions,  CheckFailure, check
+from discord.ext import commands, tasks
+from discord.utils import get
+
+TOKEN = 'ODI0NzIyNjA3Njc2MTk0ODE3.YFzgyA.gdhTFr4jV-XmlaUqGkiwaXPAoqw'
+
+
+
+
+client = discord.Client()
+
+
+
+
+
+
+
+
+responses = ["You Will Live To 100", "You Will Run In To A Wall Today", "You Will Be Over 6 Feet Tall", "You Will Be Rich", "You Will Have Pizza Today"]
+
+
+coin = ["heads", "tails"]
+
+
+
+
+
+@client.event
+async def on_message(message):
+    bad_words = ["shit", "fuck", "f***"]
+    for word in bad_words:
+        if message.content.count(word) > 0:
+            print("A bad word was said")
+            await message.channel.purge(limit=1)
+            await message.channel.send("Don't say bad words in this server!")
+    if message.author == client.user:
+        return
+
+    if message.content.startswith("ping"):
+        await message.channel.send('pong')
+    if message.content.startswith('open google'):
+        webbrowser.open('www.google.com')
+    if message.content.startswith("open stackoverflow"):
+        webbrowser.open_new_tab('stackoverflow.com')
+    if message.content.startswith("search google"):
+        searchContent = ""
+        text = str(message.content).split(' ')
+        for i in range(2, len(text)):
+            searchContent = searchContent + text[i]
+
+        for j in search(searchContent, tld="co.in", num=1, stop=1, pause=2):
+            await message.channel.send(j)
+
+    if message.content.startswith("say"):
+        mes = message.content.split()
+        output = ""
+        for word in mes [1]:
+            output += word
+            output += " "
+        await message.channel.send(output)
+        await message.delete()
+
+    if message.content.startswith("magic8ball"):
+        await  message.channel.send(random.choice(responses))
+    if message.content.startswith("coinflip"):
+        await message.channel.send(random.choice(coin))
+
+    if message.content.startswith("help"):
+        embed = discord.Embed(title="__Help And Commands For Bot__", color=0x00ff00)
+        embed.add_field(name='help', value='Try "magic8ball"\n'
+                                           'Try "coinflip"\n'
+                                           'Try "open google"')
+        await message.channel.send(content=None, embed=embed)
+
+    if message.content.startswith("hello"):
+        channel = message.channel
+        await channel.send("Hey \n"
+                           "do you want to play heads or tails?")
+
+
+
+        def check(m):
+            return m.content in ("yes", "Yes", "Sure", "sure")
+
+        msg = await client.wait_for("message", check=check)
+        await channel.send("Ok \n"""
+                           "I pick \n")
+        await  channel.send(random.choice(coin))
+        await channel.send("The Winner is.....")
+        await channel.send(random.choice(coin))
+
+
+
+@client.event
+async  def on_ready():
+    print("ammazing")
+
+
+
+
+client.run(TOKEN)
+
+
+print(client.user.name)
